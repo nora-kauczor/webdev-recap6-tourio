@@ -10,10 +10,20 @@ export default async function handler(request, response) {
   }
 
   if (request.method === "GET") {
-    const place = Place.findById(id);
+    const place = await Place.findById(id);
     if (!place) {
       return response.status(404).json({ status: "Not found" });
     }
     response.status(200).json(place);
+  }
+  if (request.method === "PUT") {
+    const updatedPlace = request.body;
+    await Place.findByIdAndUpdate(id, updatedPlace);
+    response.status(200).json({ status: "updated Place" });
+  }
+
+  if (request.method === "DELETE") {
+    await Place.findByIdAndDelete(id);
+    response.status(200).json({ status: "deleted Place" });
   }
 }
